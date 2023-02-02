@@ -28,14 +28,7 @@ const toggleBaddieAssets = (curChar) => {
 const handleWizard = (event) => {
   event.preventDefault();
   currCharacter = character.storeState("Goat Pope");
-  currCharacter(character.incLevel(1));
-  currCharacter(character.incMaxHealth(20));
-  currCharacter(character.incHealth(20));
-  currCharacter(character.incAttack(4));
-  currCharacter(character.incMagic(8));
-  currCharacter(character.incMaxMana(20));
-  currCharacter(character.incMana(20));
-  currCharacter(character.incExp(0));
+  character.createWizard(currCharacter);
   document.getElementById('charImg').setAttribute("src", "assets/images/goatpope.png");
   document.getElementById('charSelect').setAttribute('class', 'hidden');
   document.getElementById('charInfo').removeAttribute('class', 'hidden');
@@ -46,15 +39,8 @@ const handleWizard = (event) => {
 const handleWarrior = (event) => {
   event.preventDefault();
   currCharacter = character.storeState("Warrior");
-  currCharacter(character.incLevel(1));
-  currCharacter(character.incMaxHealth(15));
-  currCharacter(character.incHealth(15));
-  currCharacter(character.incAttack(9));
-  currCharacter(character.incMagic(2));
-  currCharacter(character.incMaxMana(5));
-  currCharacter(character.incMana(5));
-  currCharacter(character.incExp(0));
-  // document.getElementById('charImg').setAttribute("src", "assets/images/warrior.png");
+  character.createWarrior(currCharacter);
+  document.getElementById('charImg').setAttribute("src", "assets/images/warrior.png");
   document.getElementById('charSelect').setAttribute('class', 'hidden');
   document.getElementById('charInfo').removeAttribute('class', 'hidden');
   document.getElementById('locations').removeAttribute('class', 'hidden');
@@ -64,31 +50,42 @@ const handleWarrior = (event) => {
 const handleThief = (event) => {
   event.preventDefault();
   currCharacter = character.storeState("Thief");
-  currCharacter(character.incLevel(1));
-  currCharacter(character.incMaxincHealth(25));
-  currCharacter(character.health(25));
-  currCharacter(character.incAttack(5));
-  currCharacter(character.incMagic(5));
-  currCharacter(character.incMaxincMana(10));
-  currCharacter(character.mana(10));
-  currCharacter(character.incExp(0));
-  // document.getElementById('charImg').setAttribute("src", "assets/images/thief.png");
+  character.createThief(currCharacter);
+  document.getElementById('charImg').setAttribute("src", "assets/images/thief.png");
   document.getElementById('charSelect').setAttribute('class', 'hidden');
   document.getElementById('charInfo').removeAttribute('class', 'hidden');
   document.getElementById('locations').removeAttribute('class', 'hidden');
   toggleCharacterAssets(currCharacter);
 };
 
-const handleOctoSlash = () => {
-  currBadie = character.storeState("OctoSlash");
-  currBadie(character.incLevel(currCharacter().level));
-  currBadie(character.incMaxHealth(currCharacter().maxHealth));
-  currBadie(character.incHealth(currCharacter().health));
-  currBadie(character.incAttack(currCharacter().attack));
-  currBadie(character.incMagic(currCharacter().magic));
-  currBadie(character.incMaxMana(currCharacter().maxMana));
-  currBadie(character.incMana(currCharacter().mana));
+const octoSlash = () => {
+  currBadie = character.storeState("Octo Slash");
+  character.createOctoSlash(currBadie);
   document.getElementById('badieImg').setAttribute("src", "assets/images/octoslash.png");
+  document.getElementById('locations').removeAttribute('class', 'hidden');
+  toggleBaddieAssets(currBadie);
+};
+
+const nyteRat = () => {
+  currBadie = character.storeState("Nyte Rat");
+  character.createNyteRat(currBadie);
+  document.getElementById('badieImg').setAttribute("src", "assets/images/nyterat.png");
+  document.getElementById('locations').removeAttribute('class', 'hidden');
+  toggleBaddieAssets(currBadie);
+};
+
+const gargoyle = () => {
+  currBadie = character.storeState("Gargoyle");
+  character.createGargoyle(currBadie);
+  document.getElementById('badieImg').setAttribute("src", "assets/images/gargoyle.png");
+  document.getElementById('locations').removeAttribute('class', 'hidden');
+  toggleBaddieAssets(currBadie);
+};
+
+const unholyPriest = () => {
+  currBadie = character.storeState("Unholy Priest");
+  character.createUnholyPriest(currBadie);
+  document.getElementById('badieImg').setAttribute("src", "assets/images/unholypriest.png");
   document.getElementById('locations').removeAttribute('class', 'hidden');
   toggleBaddieAssets(currBadie);
 };
@@ -102,21 +99,17 @@ const handleFight = (event) => {
   document.getElementById("leave").classList.remove("hidden");
 };
 
-const chance = () => {
-  return 25;
-};
-
 const handleEngage = (event) => {
   event.preventDefault();
-  let randomizer = chance();
+  const randomizer = character.chance();
   if (randomizer <= 25) {
-    handleOctoSlash();
+    octoSlash();
   } else if (randomizer <= 50) {
-    handleOctoSlash();
+    nyteRat();
   } else if (randomizer <= 75) {
-    handleOctoSlash();
+    gargoyle();
   } else {
-    handleOctoSlash();
+    unholyPriest();
   }
   document.getElementById('moves').removeAttribute('class', 'hidden');
 };
