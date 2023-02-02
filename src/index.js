@@ -1,12 +1,12 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-import OctoSlash from './assets/images/octoslash.png';
-import NyteRat from './assets/images/nyterat.png';
-import Gargoyle from './assets/images/gargoyle.png';
-import Unholy from './assets/images/unholy.png';
+// import OctoSlash from './assets/images/octoslash.png';
+// import NyteRat from './assets/images/nyterat.png';
+// import Gargoyle from './assets/images/gargoyle.png';
+// import Unholy from './assets/images/unholy.png';
 import * as character from "./js/character";
-
+import { isDead } from './js/character';
 let currCharacter;
 let currBadie;
 
@@ -126,16 +126,36 @@ const handleAttack = (event) => {
   event.preventDefault();
   const charAtkDamage = character.attack(currCharacter);
   currBadie(character.decHealth(charAtkDamage));
-  document.getElementById("badieAtkDamage").innerHTML = `-${charAtkDamage}`;
+  document.getElementById("badieAtkDamage").innerHTML = `HIT for -${charAtkDamage}`;
+  toggleCharacterAssets(currCharacter);
 
   if (!character.isDead(currBadie)) {
     const badieAtkDamage = character.attack(currBadie);
     currCharacter(character.decHealth(badieAtkDamage));
+    document.getElementById("atkDamage").innerHTML = `HIT for -${badieAtkDamage}`;
+    toggleBaddieAssets(currBadie);
+  } else {
+    character.isDead(currBadie)
   }
   
-  document.getElementById("atkDamage").innerHTML = `-${badieAtkDamage}`;
+};
+
+const handleMagic = (event) => {
+  event.preventDefault();
+  const charMagicDamage = character.magic(currCharacter);
+  currBadie(character.decHealth(charMagicDamage));
+  document.getElementById("badieAtkDamage").innerHTML = `MAGICAL HIT for -${charMagicDamage}`;
   toggleCharacterAssets(currCharacter);
-  toggleBaddieAssets(currBadie);
+
+  if (!character.isDead(currBadie)) {
+    const badieAtkDamage = character.attack(currBadie);
+    currCharacter(character.decHealth(badieAtkDamage));
+    document.getElementById("atkDamage").innerHTML = `HIT for -${badieAtkDamage}`;
+    toggleBaddieAssets(currBadie);
+  } else {
+    character.isDead(currBadie)
+  }
+  
 };
 
 
@@ -148,7 +168,7 @@ addEventListener('load', function () {
   document.getElementById('engage').addEventListener('click', handleEngage);
   document.getElementById('leave').addEventListener('click', handleLeave);
   document.getElementById('attack').addEventListener('click', handleAttack);
-  // document.getElementById('magic').addEventListener('click', handleMagic);
+  document.getElementById('magic').addEventListener('click', handleMagic);
   // document.getElementById('heal').addEventListener('click', handleHeal);
   // document.getElementById('restart').addEventListener('click', handleRestart);
 });

@@ -42,6 +42,7 @@ export const decHealth = decrementState("health");
 export const decAttack = decrementState("attack");
 export const decMagic = decrementState("magic");
 export const decMana = decrementState("mana");
+export const decExp = decrementState("exp");
 
 export const createWizard = (character) => {
   character(incLevel(1));
@@ -121,6 +122,36 @@ export const attack = (character) => {
     return character().attack / 2;
   }
 };
+
+export const magic = (character) => {
+  if (character().magic >= 4) { 
+    character(decMana(4));
+    if (chance() <= character().magPercent) {
+      return character().magic;
+    } else {
+      return character().magic / 2;
+    }
+  } else {
+  document.getElementById("badieAtkDamage").innerHTML = `NOT ENOUGH MANA!`;
+}
+};
+
+// export const gainExp = (character, badie) => {
+
+// }
+
+export const lvlUp = (character) => {
+  if (character().exp >= 60) {
+    character(decExp(60));
+    character(incLevel(1));
+    character(incMaxHealth(5));
+    character(incHealth(character().maxHealth - character().health));
+    character(incAttack(2));
+    character(incMagic(2));
+    character(incMaxMana(3));
+    character(incMana(character().maxMana - character().mana));
+  }
+}
 
 export const isDead = (character) => {
   return character().health <= 0;
