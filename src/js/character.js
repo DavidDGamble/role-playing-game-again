@@ -26,6 +26,8 @@ export const incMagic = incrementState("magic");
 export const incMaxMana = incrementState("maxMana");
 export const incMana = incrementState("mana");
 export const incExp = incrementState("exp");
+export const incAttackPercent = incrementState("atkPercent");
+export const incMagicPercent = incrementState("magPercent");
 
 const decrementState = (prop) => {
   return (value) => {
@@ -50,6 +52,8 @@ export const createWizard = (character) => {
   character(incMaxMana(20));
   character(incMana(20));
   character(incExp(0));
+  character(incAttackPercent(60));
+  character(incMagicPercent(85));
 };
 
 export const createWarrior = (character) => {
@@ -61,6 +65,8 @@ export const createWarrior = (character) => {
   character(incMaxMana(5));
   character(incMana(5));
   character(incExp(0));
+  character(incAttackPercent(80));
+  character(incMagicPercent(50));
 };
 
 export const createThief = (character) => {
@@ -72,32 +78,50 @@ export const createThief = (character) => {
   character(incMaxMana(10));
   character(incMana(10));
   character(incExp(0));
+  character(incAttackPercent(80));
+  character(incMagicPercent(80));
 };
 
 export const createOctoSlash = (character) => {
   character(incHealth(12));
   character(incAttack(3));
   character(incExp(10));
+  character(incAttackPercent(50));
 };
 
 export const createNyteRat = (character) => {
   character(incHealth(12));
   character(incAttack(4));
   character(incExp(15));
+  character(incAttackPercent(60));
 };
 
 export const createGargoyle = (character) => {
   character(incHealth(20));
   character(incAttack(4));
   character(incExp(20));
+  character(incAttackPercent(60));
 };
 
 export const createUnholyPriest = (character) => {
   character(incHealth(25));
   character(incAttack(5));
   character(incExp(30));
+  character(incAttackPercent(60));
 };
 
 export const chance = () => {
   return Math.floor(Math.random() * 100) + 1;
+};
+
+export const attack = (character) => {
+  if (chance() <= character().atkPercent) {
+    return character().attack;
+  } else {
+    return character().attack / 2;
+  }
+};
+
+export const isDead = (character) => {
+  return character().health <= 0;
 };

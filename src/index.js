@@ -1,10 +1,10 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-// import OctoSlash from './assets/images/octoslash.png';
-// import NyteRat from './assets/images/nyterat.png';
-// import Gargoyle from './assets/images/gargoyle.png';
-// import Unholy from './assets/images/unholy.png';
+import OctoSlash from './assets/images/octoslash.png';
+import NyteRat from './assets/images/nyterat.png';
+import Gargoyle from './assets/images/gargoyle.png';
+import Unholy from './assets/images/unholy.png';
 import * as character from "./js/character";
 
 let currCharacter;
@@ -85,7 +85,7 @@ const gargoyle = () => {
 const unholyPriest = () => {
   currBadie = character.storeState("Unholy Priest");
   character.createUnholyPriest(currBadie);
-  document.getElementById('badieImg').setAttribute("src", "assets/images/unholypriest.png");
+  document.getElementById('badieImg').setAttribute("src", "assets/images/unholy.png");
   document.getElementById('locations').removeAttribute('class', 'hidden');
   toggleBaddieAssets(currBadie);
 };
@@ -124,8 +124,16 @@ const handleLeave = (event) => {
 
 const handleAttack = (event) => {
   event.preventDefault();
-  currBadie(character.decHealth(currCharacter().attack));
-  currCharacter(character.decHealth(currBadie().attack));
+  const charAtkDamage = character.attack(currCharacter);
+  currBadie(character.decHealth(charAtkDamage));
+  document.getElementById("badieAtkDamage").innerHTML = `-${charAtkDamage}`;
+
+  if (!character.isDead(currBadie)) {
+    const badieAtkDamage = character.attack(currBadie);
+    currCharacter(character.decHealth(badieAtkDamage));
+  }
+  
+  document.getElementById("atkDamage").innerHTML = `-${badieAtkDamage}`;
   toggleCharacterAssets(currCharacter);
   toggleBaddieAssets(currBadie);
 };
