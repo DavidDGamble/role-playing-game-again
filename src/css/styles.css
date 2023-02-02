@@ -6,6 +6,16 @@ h1 {
   color: white;
 }
 
+.card-text, .card-title {
+  color: black;
+}
+
+.potion {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 h2#badieName {
   text-align: center;
 }

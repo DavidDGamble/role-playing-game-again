@@ -6,6 +6,7 @@ import NyteRat from './assets/images/nyterat.png';
 import Gargoyle from './assets/images/gargoyle.png';
 import Unholy from './assets/images/unholy.png';
 import * as character from "./js/character";
+import { handleShop, closeShop } from './js/store';
 
 let currCharacter;
 let currBadie;
@@ -138,13 +139,13 @@ const handleAttack = (event) => {
   toggleBaddieAssets(currBadie);
 };
 
-
 addEventListener('load', function () {
   document.getElementById('wizard').addEventListener('click', handleWizard);
   document.getElementById('warrior').addEventListener('click', handleWarrior);
   document.getElementById('thief').addEventListener('click', handleThief);
   document.getElementById('fight').addEventListener('click', handleFight);
-  // document.getElementById('shop').addEventListener('click', handleChurch);
+  document.getElementById('shop').addEventListener('click', handleShop);
+  document.getElementById('close-shop').addEventListener('click', closeShop);
   document.getElementById('engage').addEventListener('click', handleEngage);
   document.getElementById('leave').addEventListener('click', handleLeave);
   document.getElementById('attack').addEventListener('click', handleAttack);
