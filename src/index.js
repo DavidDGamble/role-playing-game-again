@@ -1,10 +1,10 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-// import OctoSlash from './assets/images/octoslash.png';
-// import NyteRat from './assets/images/nyterat.png';
-// import Gargoyle from './assets/images/gargoyle.png';
-// import Unholy from './assets/images/unholy.png';
+import OctoSlash from './assets/images/octoslash.png';
+import NyteRat from './assets/images/nyterat.png';
+import Gargoyle from './assets/images/gargoyle.png';
+import Unholy from './assets/images/unholy.png';
 import * as character from "./js/character";
 import { handleShop, closeShop } from './js/store';
 
@@ -19,11 +19,30 @@ const toggleCharacterAssets = (curChar) => {
   document.getElementById('heroMagic').innerHTML = curChar().magic;
   document.getElementById('heroMana').innerHTML = curChar().mana;
   document.getElementById('heroExp').innerHTML = curChar().exp;
+  document.getElementById('heroGold').innerHTML = curChar().gold;
 };
 
 const toggleBaddieAssets = (curChar) => {
   document.getElementById('badieName').innerHTML = curChar().name;
   document.getElementById('badieHealth').innerHTML = curChar().health;
+};
+
+const deadCharacterAssests = () => {
+  document.getElementById("dead").innerText = 'DEAD MEAT!';
+  document.getElementById('heroHealth').innerHTML = 0;
+  document.getElementById('moves').setAttribute('class', 'hidden');
+  document.getElementById('choice').setAttribute('class', 'hidden');
+  document.getElementById('reset').removeAttribute('class', 'hidden');
+}
+
+const deadBaddieAssets = () => {
+  document.getElementById('badieName').setAttribute('style', 'color: red;')
+  document.getElementById("badieName").innerText = "DEAD MEAT!";
+  document.getElementById("badieAtkDamage").innerHTML = null;
+  document.getElementById("atkDamage").innerHTML = null;
+  document.getElementById('badieHealth').innerHTML = null;
+  document.getElementById('choice').removeAttribute('class', 'hidden');
+  document.getElementById('moves').setAttribute('class', 'hidden');
 };
 
 const handleWizard = (event) => {
@@ -112,15 +131,14 @@ const handleEngage = (event) => {
   } else {
     unholyPriest();
   }
+  document.getElementById('choice').setAttribute('class', 'hidden');
   document.getElementById('moves').removeAttribute('class', 'hidden');
 };
 
 const handleLeave = (event) => {
   event.preventDefault();
-  // currCharacter.location = '';
-  document.getElementById('locations').removeAttribute('class', 'hidden');
   document.getElementById('choice').setAttribute('class', 'hidden');
-  //picture
+  document.getElementById('locations').removeAttribute('class', 'hidden');
 };
 
 const handleAttack = (event) => {
@@ -128,35 +146,54 @@ const handleAttack = (event) => {
   const charAtkDamage = character.attack(currCharacter);
   currBadie(character.decHealth(charAtkDamage));
   document.getElementById("badieAtkDamage").innerHTML = `HIT for -${charAtkDamage}`;
-  toggleCharacterAssets(currCharacter);
+  toggleBaddieAssets(currBadie);
 
   if (!character.isDead(currBadie)) {
     const badieAtkDamage = character.attack(currBadie);
     currCharacter(character.decHealth(badieAtkDamage));
     document.getElementById("atkDamage").innerHTML = `HIT for -${badieAtkDamage}`;
-    toggleBaddieAssets(currBadie);
+    toggleCharacterAssets(currCharacter);
   } else {
-    character.isDead(currBadie)
+    character.gainExp(currCharacter, currBadie);
+    character.gainGold(currCharacter);
+    character.lvlUp(currCharacter);
+    toggleCharacterAssets(currCharacter);
+    deadBaddieAssets();
   }
-  
+
+  if (character.isDead(currCharacter)) {
+    deadCharacterAssests();
+  }
 };
 
 const handleMagic = (event) => {
   event.preventDefault();
   const charMagicDamage = character.magic(currCharacter);
-  currBadie(character.decHealth(charMagicDamage));
-  document.getElementById("badieAtkDamage").innerHTML = `MAGICAL HIT for -${charMagicDamage}`;
-  toggleCharacterAssets(currCharacter);
-
-  if (!character.isDead(currBadie)) {
-    const badieAtkDamage = character.attack(currBadie);
-    currCharacter(character.decHealth(badieAtkDamage));
-    document.getElementById("atkDamage").innerHTML = `HIT for -${badieAtkDamage}`;
+  if (charMagicDamage) {
+    currBadie(character.decHealth(charMagicDamage));
+    document.getElementById("badieAtkDamage").innerHTML = `MAGICAL HIT for -${charMagicDamage}`;
     toggleBaddieAssets(currBadie);
+
+    if (!character.isDead(currBadie)) {
+      const badieAtkDamage = character.attack(currBadie);
+      currCharacter(character.decHealth(badieAtkDamage));
+      document.getElementById("atkDamage").innerHTML = `HIT for -${badieAtkDamage}`;
+      toggleCharacterAssets(currCharacter);
+    } else {
+      character.gainExp(currCharacter, currBadie);
+      character.gainGold(currCharacter);
+      character.lvlUp(currCharacter);
+      toggleCharacterAssets(currCharacter);
+      deadBaddieAssets();
+    }
   } else {
-    character.isDead(currBadie)
+    document.getElementById("dead").innerText = 'NOT ENOUGH MANA!';
   }
-  
+
+};
+
+const handleRestart = () => {
+  window.location.reload();
 };
 
 addEventListener('load', function () {
@@ -171,5 +208,5 @@ addEventListener('load', function () {
   document.getElementById('attack').addEventListener('click', handleAttack);
   document.getElementById('magic').addEventListener('click', handleMagic);
   // document.getElementById('heal').addEventListener('click', handleHeal);
-  // document.getElementById('restart').addEventListener('click', handleRestart);
+  document.getElementById('restart').addEventListener('click', handleRestart);
 });

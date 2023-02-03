@@ -26,6 +26,7 @@ export const incMagic = incrementState("magic");
 export const incMaxMana = incrementState("maxMana");
 export const incMana = incrementState("mana");
 export const incExp = incrementState("exp");
+export const incGold = incrementState("gold");
 export const incAttackPercent = incrementState("atkPercent");
 export const incMagicPercent = incrementState("magPercent");
 
@@ -43,6 +44,7 @@ export const decAttack = decrementState("attack");
 export const decMagic = decrementState("magic");
 export const decMana = decrementState("mana");
 export const decExp = decrementState("exp");
+export const decGold = decrementState("gold");
 
 export const createWizard = (character) => {
   character(incLevel(1));
@@ -53,6 +55,7 @@ export const createWizard = (character) => {
   character(incMaxMana(20));
   character(incMana(20));
   character(incExp(0));
+  character(incGold(0));
   character(incAttackPercent(60));
   character(incMagicPercent(85));
 };
@@ -66,6 +69,7 @@ export const createWarrior = (character) => {
   character(incMaxMana(5));
   character(incMana(5));
   character(incExp(0));
+  character(incGold(0));
   character(incAttackPercent(80));
   character(incMagicPercent(50));
 };
@@ -79,6 +83,7 @@ export const createThief = (character) => {
   character(incMaxMana(10));
   character(incMana(10));
   character(incExp(0));
+  character(incGold(0));
   character(incAttackPercent(80));
   character(incMagicPercent(80));
 };
@@ -124,7 +129,7 @@ export const attack = (character) => {
 };
 
 export const magic = (character) => {
-  if (character().magic >= 4) { 
+  if (character().mana >= 4) {
     character(decMana(4));
     if (chance() <= character().magPercent) {
       return character().magic;
@@ -132,13 +137,20 @@ export const magic = (character) => {
       return character().magic / 2;
     }
   } else {
-  document.getElementById("badieAtkDamage").innerHTML = `NOT ENOUGH MANA!`;
-}
+    return false;
+  }
 };
 
-// export const gainExp = (character, badie) => {
+export const gainExp = (character, badie) => {
+  character(incExp(badie().exp));
+  return badie().exp;
+};
 
-// }
+export const gainGold = (character) => {
+  const gold = Math.floor(Math.random() * 5);
+  character(incGold(gold));
+  return gold;
+};
 
 export const lvlUp = (character) => {
   if (character().exp >= 60) {
@@ -151,7 +163,7 @@ export const lvlUp = (character) => {
     character(incMaxMana(3));
     character(incMana(character().maxMana - character().mana));
   }
-}
+};
 
 export const isDead = (character) => {
   return character().health <= 0;
